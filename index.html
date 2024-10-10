@@ -1,114 +1,352 @@
 <!DOCTYPE html>
-<html lang="en" >
+<html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Sidebar Menu</title>
-  <link rel='stylesheet' href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css'>
-<link rel='stylesheet' href='https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&amp;display=swap'><link rel="stylesheet" href="./style.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cosmic Games Hub</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+            100% { transform: translateY(0px); }
+        }
+        .float { animation: float 3s ease-in-out infinite; }
+        .cosmic-bg {
+            background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 800 800"><rect fill="%230f172a" width="800" height="800"/><g fill="none" stroke="%234338ca" stroke-width="1"><path d="M769 229L1037 260.9M927 880L731 737 520 660 309 538 40 599 295 764 126.5 879.5 40 599-197 493 102 382-31 229 126.5 79.5-69-63"/><path d="M-31 229L237 261 390 382 603 493 308.5 537.5 101.5 381.5M370 905L295 764"/><path d="M520 660L578 842 731 737 840 599 603 493 520 660 295 764 309 538 390 382 539 269 769 229 577.5 41.5 370 105 295 -36 126.5 79.5 237 261 102 382 40 599 -69 737 127 880"/><path d="M520-140L578.5 42.5 731-63M603 493L539 269 237 261 370 105M902 382L539 269M390 382L102 382"/><path d="M-222 42L126.5 79.5 370 105 539 269 577.5 41.5 927 80 769 229 902 382 603 493 731 737M295-36L577.5 41.5M578 842L295 764M40-201L127 80M102 382L-261 269"/></g><g fill="%234338ca"><circle cx="769" cy="229" r="5"/><circle cx="539" cy="269" r="5"/><circle cx="603" cy="493" r="5"/><circle cx="731" cy="737" r="5"/><circle cx="520" cy="660" r="5"/><circle cx="309" cy="538" r="5"/><circle cx="295" cy="764" r="5"/><circle cx="40" cy="599" r="5"/><circle cx="102" cy="382" r="5"/><circle cx="127" cy="80" r="5"/><circle cx="370" cy="105" r="5"/><circle cx="578" cy="42" r="5"/><circle cx="237" cy="261" r="5"/><circle cx="390" cy="382" r="5"/></g></svg>');
+        }
+    </style>
 </head>
-<body>
-<!-- partial:index.partial.html -->
-<nav class="sidebar close">
-  <header>
-    <div class="image-text">
-      <span class="image">
-        <img src="https://i.postimg.cc/jqgkqhSb/cast-11.jpg" alt="image gallery">
-      </span>
-
-      <div class="text logo-text">
-        <span class="name">ICOM DIGITAL </span>
-        <span class="profession">Development</span>
-      </div>
-    </div>
-
-    <i class='bx bx-chevron-right toggle'></i>
-  </header>
-
-  <div class="menu-bar">
-    <div class="menu">
-
-      <li class="search-box">
-        <i class='bx bx-search icon'></i>
-        <input type="text" placeholder="Search...">
-      </li>
-
-      <ul class="menu-links">
-        <li class="nav-link">
-          <a href="#">
-            <i class='bx bx-home-alt icon'></i>
-            <span class="text nav-text">Dashboard</span>
-          </a>
-        </li>
-
-        <li class="nav-link">
-          <a href="#">
-            <i class='bx bx-bar-chart-alt-2 icon'></i>
-            <span class="text nav-text">Revenue</span>
-          </a>
-        </li>
-
-        <li class="nav-link">
-          <a href="#">
-            <i class='bx bx-bell icon'></i>
-            <span class="text nav-text">Notifications</span>
-          </a>
-        </li>
-
-        <li class="nav-link">
-          <a href="#">
-            <i class='bx bx-pie-chart-alt icon'></i>
-            <span class="text nav-text">Analytics</span>
-          </a>
-        </li>
-
-        <li class="nav-link">
-          <a href="#">
-            <i class='bx bx-heart icon'></i>
-            <span class="text nav-text">Likes</span>
-          </a>
-        </li>
-
-        <li class="nav-link">
-          <a href="#">
-            <i class='bx bx-wallet icon'></i>
-            <span class="text nav-text">Wallets</span>
-          </a>
-        </li>
-
-      </ul>
-    </div>
-
-    <div class="bottom-content">
-      <li class="">
-        <a href="#">
-          <i class='bx bx-log-out icon'></i>
-          <span class="text nav-text">Logout</span>
-        </a>
-      </li>
-
-      <li class="mode">
-        <div class="sun-moon">
-          <i class='bx bx-moon icon moon'></i>
-          <i class='bx bx-sun icon sun'></i>
+<body class="bg-slate-900 text-white min-h-screen flex flex-col items-center justify-center cosmic-bg">
+    <div id="game-container" class="w-full max-w-2xl p-6 bg-slate-800 rounded-xl shadow-2xl">
+        <h1 class="text-4xl font-bold text-center mb-6 text-indigo-400">Cosmic Games Hub</h1>
+        <div class="flex justify-between items-center mb-6">
+            <div class="text-xl"><i class="fas fa-gem text-yellow-400 mr-2"></i>Gems: <span id="gems" class="font-bold">0</span></div>
+            <div class="text-xl"><i class="fas fa-coins text-indigo-400 mr-2"></i>CosmicCoins: <span id="coins" class="font-bold">1000</span></div>
         </div>
-        <span class="mode-text text">Dark mode</span>
-
-        <div class="toggle-switch">
-          <span class="switch"></span>
+        <div id="game-selection" class="grid grid-cols-2 gap-4 mb-6">
+            <button class="game-btn bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105" data-game="cosmic-blast">
+                <i class="fas fa-rocket mr-2"></i>Cosmic Blast
+            </button>
+            <button class="game-btn bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105" data-game="cosmic-spinner">
+                <i class="fas fa-sync-alt mr-2"></i>Cosmic Spinner
+            </button>
+            <button class="game-btn bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105" data-game="swipe-cosmic">
+                <i class="fas fa-hand-point-up mr-2"></i>Swipe Cosmic
+            </button>
+            <button class="game-btn bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105" data-game="hold-cosmic">
+                <i class="fas fa-hand-rock mr-2"></i>Hold Cosmic
+            </button>
         </div>
-      </li>
-
+        <div id="game-area" class="bg-slate-700 rounded-lg p-4 h-96 relative overflow-hidden">
+            <!-- Game elements will be added here dynamically -->
+        </div>
     </div>
-  </div>
 
-</nav>
+    <script>
+        const gameArea = document.getElementById('game-area');
+        const gemsElement = document.getElementById('gems');
+        const coinsElement = document.getElementById('coins');
+        const gameButtons = document.querySelectorAll('.game-btn');
 
-<section class="home">
-  <div class="text">Dashboard Sidebar</div>
-</section>
-<!-- partial -->
-  <script  src="./script.js"></script>
+        let gems = 0;
+        let coins = 1000;
+        let currentGame = null;
+        let gameInterval;
+        let cooldowns = {
+            'cosmic-blast': 0,
+            'cosmic-spinner': 0,
+            'swipe-cosmic': 0,
+            'hold-cosmic': 0
+        };
 
+        function updateResources() {
+            gemsElement.textContent = gems;
+            coinsElement.textContent = coins;
+        }
+
+        function createSVGElement(type, color) {
+            const ns = "http://www.w3.org/2000/svg";
+            const svg = document.createElementNS(ns, "svg");
+            svg.setAttribute("xmlns", ns);
+            svg.setAttribute("viewBox", "0 0 24 24");
+            svg.setAttribute("width", "40");
+            svg.setAttribute("height", "40");
+            svg.setAttribute("fill", color);
+
+            const path = document.createElementNS(ns, "path");
+            if (type === "asteroid") {
+                path.setAttribute("d", "M21.82 15.42L19.32 19.75C18.83 20.61 17.92 21.06 17 21H15V23L12.5 18.5L15 14V16H17.82L15.6 12.15L19.93 9.65C20.79 9.16 21.24 8.25 21.18 7.33C21.13 6.41 20.54 5.57 19.66 5.18C18.78 4.79 17.77 4.91 17 5.5L12.72 8.19L5.82 3.63C4.97 3.06 3.83 3.13 3.05 3.83C2.27 4.5 2.03 5.62 2.50 6.54L5.72 13.14L4.72 14.61C3.29 17.01 3.81 20.12 6.00 22.00L7.00 23.00L6.00 12.00L10.00 14.00L12.00 22.00L13.00 21.00L13.31 20.58C13.59 20.18 13.78 19.74 13.87 19.26L14.20 17.78L16.20 19.78C16.80 20.38 17.20 21.18 17.20 22.00V23.00L18.20 22.00C19.82 20.38 20.50 18.10 20.00 16.00L19.82 15.42H21.82ZM13.00 2.00C12.40 2.00 12.00 2.40 12.00 3.00C12.00 3.60 12.40 4.00 13.00 4.00C13.60 4.00 14.00 3.60 14.00 3.00C14.00 2.40 13.60 2.00 13.00 2.00Z");
+            } else if (type === "spaceship") {
+                path.setAttribute("d", "M13,2.05V5.08C16.39,5.57 19,8.47 19,12C19,12.9 18.82,13.75 18.5,14.54L21.12,16.07C21.68,14.83 22,13.45 22,12C22,6.82 18.05,2.55 13,2.05M12,19A7,7 0 0,1 5,12C5,8.47 7.61,5.57 11,5.08V2.05C5.94,2.55 2,6.81 2,12A10,10 0 0,0 12,22C15.3,22 18.23,20.39 20.05,17.91L17.45,16.38C16.17,18 14.21,19 12,19Z");
+            }
+            svg.appendChild(path);
+            return svg;
+        }
+
+        function startCosmicBlast() {
+            gameArea.innerHTML = '<div id="score" class="absolute top-2 left-2 text-xl font-bold">Score: 0</div>';
+            let score = 0;
+            const scoreElement = document.getElementById('score');
+
+            const ship = createSVGElement('spaceship', '#818cf8');
+            ship.classList.add('absolute', 'bottom-0', 'left-1/2', 'transform', '-translate-x-1/2');
+            gameArea.appendChild(ship);
+
+            function createGameObject(type) {
+                const object = document.createElement('div');
+                object.className = `absolute ${type} float`;
+                object.style.left = `${Math.random() * (gameArea.clientWidth - 40)}px`;
+                object.style.top = '-40px';
+
+                if (type === 'asteroid') {
+                    object.appendChild(createSVGElement('asteroid', '#9CA3AF'));
+                } else if (type === 'gem') {
+                    const gemSVG = createSVGElement('asteroid', '#34D399');
+                    gemSVG.classList.add('text-green-400');
+                    object.appendChild(gemSVG);
+                }
+
+                gameArea.appendChild(object);
+                return object;
+            }
+
+            function moveObject(object) {
+                const speed = object.classList.contains('asteroid') ? 2 : 1;
+                object.style.top = `${parseInt(object.style.top) + speed}px`;
+
+                if (parseInt(object.style.top) > gameArea.clientHeight) {
+                    object.remove();
+                }
+            }
+
+            function checkCollision(object) {
+                const shipRect = ship.getBoundingClientRect();
+                const objectRect = object.getBoundingClientRect();
+
+                return !(shipRect.right < objectRect.left || 
+                         shipRect.left > objectRect.right || 
+                         shipRect.bottom < objectRect.top || 
+                         shipRect.top > objectRect.bottom);
+            }
+
+            function updateGame() {
+                const objects = gameArea.querySelectorAll('.asteroid, .gem');
+                objects.forEach(object => {
+                    moveObject(object);
+                    if (checkCollision(object)) {
+                        if (object.classList.contains('asteroid')) {
+                            endGame();
+                        } else {
+                            score += 10;
+                            gems += 1;
+                            scoreElement.textContent = `Score: ${score}`;
+                            updateResources();
+                            object.remove();
+                        }
+                    }
+                });
+
+                if (Math.random() < 0.05) {
+                    createGameObject('asteroid');
+                }
+                if (Math.random() < 0.02) {
+                    createGameObject('gem');
+                }
+            }
+
+            gameInterval = setInterval(updateGame, 50);
+
+            gameArea.addEventListener('mousemove', (e) => {
+                const rect = gameArea.getBoundingClientRect();
+                const x = e.clientX - rect.left - 20;
+                ship.style.left = `${Math.max(0, Math.min(x, gameArea.clientWidth - 40))}px`;
+            });
+
+            function endGame() {
+                clearInterval(gameInterval);
+                alert(`Game Over! You scored ${score} points and earned ${gems} Galactic Gems!`);
+                gameArea.innerHTML = '';
+                updateCooldown('cosmic-blast');
+            }
+        }
+
+        function startCosmicSpinner() {
+            gameArea.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full">
+                    <div id="spinner" class="w-48 h-48 border-8 border-indigo-600 border-t-indigo-400 rounded-full animate-spin mb-4"></div>
+                    <input type="number" id="bet-amount" class="bg-slate-700 text-white border border-indigo-400 rounded px-2 py-1 mb-2" placeholder="Bet amount">
+                    <button id="spin-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">Spin</button>
+                </div>
+            `;
+
+            const spinBtn = document.getElementById('spin-btn');
+            const betInput = document.getElementById('bet-amount');
+
+            spinBtn.addEventListener('click', () => {
+                const betAmount = parseInt(betInput.value);
+                if (isNaN(betAmount) || betAmount <= 0 || betAmount > coins) {
+                    alert('Invalid bet amount!');
+                    return;
+                }
+
+                coins -= betAmount;
+                updateResources();
+
+                spinBtn.disabled = true;
+                setTimeout(() => {
+                    const multiplier = Math.random() < 0.5 ? 0  : (Math.random() * 2 + 1).toFixed(1);
+                    const winAmount = Math.floor(betAmount * multiplier);
+                    coins += winAmount;
+                    updateResources();
+                    alert(`You won ${winAmount} CosmicCoins! (${multiplier}x)`);
+                    spinBtn.disabled = false;
+                    updateCooldown('cosmic-spinner');
+                }, 3000);
+            });
+        }
+
+        function startSwipeCosmic() {
+            gameArea.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full">
+                    <div id="swipe-area" class="w-64 h-32 bg-slate-600 rounded-lg flex items-center justify-center cursor-pointer">
+                        <div id="swipe-object" class="w-16 h-16 bg-indigo-500 rounded-full"></div>
+                    </div>
+                    <p class="mt-4">Swipe the object to earn CosmicCoins!</p>
+                </div>
+            `;
+
+            const swipeArea = document.getElementById('swipe-area');
+            const swipeObject = document.getElementById('swipe-object');
+            let startX, startY, endX, endY;
+
+            swipeArea.addEventListener('mousedown', (e) => {
+                startX = e.clientX;
+                startY = e.clientY;
+            });
+
+            swipeArea.addEventListener('mouseup', (e) => {
+                endX = e.clientX;
+                endY = e.clientY;
+                const distance = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
+                if (distance > 50) {
+                    coins += 10;
+                    updateResources();
+                    swipeObject.style.transition = 'transform 0.3s';
+                    swipeObject.style.transform = 'scale(1.2)';
+                    setTimeout(() => {
+                        swipeObject.style.transform = 'scale(1)';
+                    }, 300);
+                }
+            });
+
+            setTimeout(() => {
+                alert('Time\'s up! Swipe Cosmic game ended.');
+                updateCooldown('swipe-cosmic');
+            }, 30000);
+        }
+
+        function startHoldCosmic() {
+            gameArea.innerHTML = `
+                <div class="flex flex-col items-center justify-center h-full">
+                    <div id="hold-button" class="w-32 h-32 bg-indigo-600 rounded-full flex items-center justify-center cursor-pointer select-none">
+                        <span class="text-2xl font-bold">HOLD</span>
+                    </div>
+                    <p id="hold-timer" class="mt-4 text-2xl font-bold">5</p>
+                </div>
+            `;
+
+            const holdButton = document.getElementById('hold-button');
+            const holdTimer = document.getElementById('hold-timer');
+            let isHolding = false;
+            let holdInterval;
+            let timeLeft = 5;
+
+            holdButton.addEventListener('mousedown', () => {
+                isHolding = true;
+                holdButton.classList.add('bg-indigo-700');
+                holdInterval = setInterval(() => {
+                    timeLeft--;
+                    holdTimer.textContent = timeLeft;
+                    if (timeLeft === 0) {
+                        clearInterval(holdInterval);
+                        coins += 50;
+                        updateResources();
+                        alert('Congratulations! You earned 50 CosmicCoins!');
+                        updateCooldown('hold-cosmic');
+                    }
+                }, 1000);
+            });
+
+            holdButton.addEventListener('mouseup', () => {
+                isHolding = false;
+                holdButton.classList.remove('bg-indigo-700');
+                clearInterval(holdInterval);
+                timeLeft = 5;
+                holdTimer.textContent = timeLeft;
+            });
+
+            holdButton.addEventListener('mouseleave', () => {
+                if (isHolding) {
+                    isHolding = false;
+                    holdButton.classList.remove('bg-indigo-700');
+                    clearInterval(holdInterval);
+                    timeLeft = 5;
+                    holdTimer.textContent = timeLeft;
+                }
+            });
+        }
+
+        function updateCooldown(game) {
+            cooldowns[game] = Date.now() + 6 * 60 * 60 * 1000; // 6 hours in milliseconds
+            localStorage.setItem('cooldowns', JSON.stringify(cooldowns));
+            updateButtonStates();
+        }
+
+        function updateButtonStates() {
+            gameButtons.forEach(button => {
+                const game = button.dataset.game;
+                const cooldown = cooldowns[game];
+                const now = Date.now();
+                if (cooldown > now) {
+                    button.disabled = true;
+                    const hoursLeft = Math.ceil((cooldown - now) / (60 * 60 * 1000));
+                    button.textContent = `${button.textContent} (${hoursLeft}h)`;
+                } else {
+                    button.disabled = false;
+                    button.textContent = button.textContent.split(' (')[0];
+                }
+            });
+        }
+
+        function loadCooldowns() {
+            const savedCooldowns = localStorage.getItem('cooldowns');
+            if (savedCooldowns) {
+                cooldowns = JSON.parse(savedCooldowns);
+                updateButtonStates();
+            }
+        }
+
+        gameButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const game = button.dataset.game;
+                if (cooldowns[game] > Date.now()) {
+                    alert('This game is on cooldown. Please wait before playing again.');
+                    return;
+                }
+                currentGame = game;
+                gameArea.innerHTML = '';
+                clearInterval(gameInterval);
+                if (game === 'cosmic-blast') startCosmicBlast();
+                else if (game === 'cosmic-spinner') startCosmicSpinner();
+                else if (game === 'swipe-cosmic') startSwipeCosmic();
+                else if (game === 'hold-cosmic') startHoldCosmic();
+            });
+        });
+
+        loadCooldowns();
+        setInterval(updateButtonStates, 60000); // Update button states every minute
+    </script>
 </body>
 </html>
