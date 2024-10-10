@@ -55,11 +55,7 @@
         let coins = parseInt(localStorage.getItem('coins')) || 1000;
         let currentGame = localStorage.getItem('currentGame') || null;
             
-        let gems = 0;
-        let coins = 1000;
-        let currentGame = null;
-        let gameInterval;
-
+        
         function updateResources() {
             gemsElement.textContent = gems;
             coinsElement.textContent = coins;
