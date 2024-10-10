@@ -98,30 +98,6 @@
     });
 });
     
-// Function to reset all users' balance and gems
-function resetUserData() {
-    // Set the balance and gems to default values
-    localStorage.setItem('coins', 0); // Reset coins (CosmicCoins)
-    localStorage.setItem('gems', 0); // Reset gems
-    
-    // Optionally update the display immediately if needed
-    document.getElementById('coins').textContent = '0';
-    document.getElementById('gems').textContent = '0';
-    
-    alert('All users\' balances and gems have been reset.');
-}
-
-// Add a reset button somewhere in your UI
-document.body.innerHTML += `
-    <div class="mt-6 text-center">
-        <button id="reset-btn" class="bg-red-500 hover:bg-red-600 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">
-            Reset All Balances & Gems
-        </button>
-    </div>
-`;
-
-// Event listener for the reset button
-document.getElementById('reset-btn').addEventListener('click', resetUserData);
 
 </script>
 
