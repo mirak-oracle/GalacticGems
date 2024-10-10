@@ -8,9 +8,9 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         @keyframes float {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-10px); }
-            100% { transform: translateY(0px); }
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-10px) rotate(5deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
         }
         .float { animation: float 3s ease-in-out infinite; }
         .cosmic-bg {
@@ -19,7 +19,7 @@
     </style>
 </head>
 <body class="bg-slate-900 text-white min-h-screen flex flex-col items-center justify-center cosmic-bg">
-    <div id="game-container" class="w-full max-w-2xl p-6 bg-slate-800 rounded-xl shadow-2xl">
+    <div id="game-container" class="w-full max-w-2xl p-6 bg-slate-800 bg-opacity-90 rounded-xl shadow-2xl">
         <h1 class="text-4xl font-bold text-center mb-6 text-indigo-400">Cosmic Games Hub</h1>
         <div class="flex justify-between items-center mb-6">
             <div class="text-xl"><i class="fas fa-gem text-yellow-400 mr-2"></i>Gems: <span id="gems" class="font-bold">0</span></div>
@@ -66,20 +66,30 @@
             coinsElement.textContent = coins;
         }
 
-        function createSVGElement(type, color) {
+        function createSVGElement(type) {
             const ns = "http://www.w3.org/2000/svg";
             const svg = document.createElementNS(ns, "svg");
             svg.setAttribute("xmlns", ns);
             svg.setAttribute("viewBox", "0 0 24 24");
             svg.setAttribute("width", "40");
             svg.setAttribute("height", "40");
-            svg.setAttribute("fill", color);
 
             const path = document.createElementNS(ns, "path");
             if (type === "asteroid") {
+                svg.setAttribute("fill", "#9CA3AF");
                 path.setAttribute("d", "M21.82 15.42L19.32 19.75C18.83 20.61 17.92 21.06 17 21H15V23L12.5 18.5L15 14V16H17.82L15.6 12.15L19.93 9.65C20.79 9.16 21.24 8.25 21.18 7.33C21.13 6.41 20.54 5.57 19.66 5.18C18.78 4.79 17.77 4.91 17 5.5L12.72 8.19L5.82 3.63C4.97 3.06 3.83 3.13 3.05 3.83C2.27 4.5 2.03 5.62 2.50 6.54L5.72 13.14L4.72 14.61C3.29 17.01 3.81 20.12 6.00 22.00L7.00 23.00L6.00 12.00L10.00 14.00L12.00 22.00L13.00 21.00L13.31 20.58C13.59 20.18 13.78 19.74 13.87 19.26L14.20 17.78L16.20 19.78C16.80 20.38 17.20 21.18 17.20 22.00V23.00L18.20 22.00C19.82 20.38 20.50 18.10 20.00 16.00L19.82 15.42H21.82ZM13.00 2.00C12.40 2.00 12.00 2.40 12.00 3.00C12.00 3.60 12.40 4.00 13.00 4.00C13.60 4.00 14.00 3.60 14.00 3.00C14.00 2.40 13.60 2.00 13.00 2.00Z");
             } else if (type === "spaceship") {
+                svg.setAttribute("fill", "#818cf8");
                 path.setAttribute("d", "M13,2.05V5.08C16.39,5.57 19,8.47 19,12C19,12.9 18.82,13.75 18.5,14.54L21.12,16.07C21.68,14.83 22,13.45 22,12C22,6.82 18.05,2.55 13,2.05M12,19A7,7 0 0,1 5,12C5,8.47 7.61,5.57 11,5.08V2.05C5.94,2.55 2,6.81 2,12A10,10 0 0,0 12,22C15.3,22 18.23,20.39 20.05,17.91L17.45,16.38C16.17,18 14.21,19 12,19Z");
+            } else if (type === "gem") {
+                svg.innerHTML = `
+                    <linearGradient id="gem-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                        <stop offset="0%" style="stop-color:#48BB78;stop-opacity:1" />
+                        <stop offset="100%" style="stop-color:#34D399;stop-opacity:1" />
+                    </linearGradient>
+                    <path fill="url(#gem-gradient)" d="M6,16L3,5L8.5,2L14,5L12,16H6M9.36,14L10.8,7.3L8.5,5.5L5.14,7.15L6.8,14H9.36M14.64,14L16.3,7.15L13,5.5L10.7,7.3L12.14,14H14.64M16,16L18,5L13.5,2L8,5L10,16H16Z"/>
+                `;
+                return svg;
             }
             svg.appendChild(path);
             return svg;
@@ -90,7 +100,7 @@
             let score = 0;
             const scoreElement = document.getElementById('score');
 
-            const ship = createSVGElement('spaceship', '#818cf8');
+            const ship = createSVGElement('spaceship');
             ship.classList.add('absolute', 'bottom-0', 'left-1/2', 'transform', '-translate-x-1/2');
             gameArea.appendChild(ship);
 
@@ -101,11 +111,9 @@
                 object.style.top = '-40px';
 
                 if (type === 'asteroid') {
-                    object.appendChild(createSVGElement('asteroid', '#9CA3AF'));
+                    object.appendChild(createSVGElement('asteroid'));
                 } else if (type === 'gem') {
-                    const gemSVG = createSVGElement('asteroid', '#34D399');
-                    gemSVG.classList.add('text-green-400');
-                    object.appendChild(gemSVG);
+                    object.appendChild(createSVGElement('gem'));
                 }
 
                 gameArea.appendChild(object);
@@ -173,78 +181,112 @@
         }
 
         function startCosmicSpinner() {
+            const prizes = [
+                { type: 'gem', amount: 5, probability: 0.3 },
+                { type: 'coin', amount: 50, probability:  0.3 },
+                { type: 'gem', amount: 10, probability: 0.2 },
+                { type: 'coin', amount: 100, probability: 0.15 },
+                { type: 'gem', amount: 20, probability: 0.05 },
+            ];
+
             gameArea.innerHTML = `
                 <div class="flex flex-col items-center justify-center h-full">
-                    <div id="spinner" class="w-48 h-48 border-8 border-indigo-600 border-t-indigo-400 rounded-full animate-spin mb-4"></div>
-                    <input type="number" id="bet-amount" class="bg-slate-700 text-white border border-indigo-400 rounded px-2 py-1 mb-2" placeholder="Bet amount">
+                    <div id="spinner" class="w-64 h-64 border-8 border-indigo-600 rounded-full relative mb-4">
+                        ${prizes.map((prize, index) => `
+                            <div class="absolute w-full h-full" style="transform: rotate(${index * (360 / prizes.length)}deg)">
+                                <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-indigo-500 text-white px-2 py-1 rounded">
+                                    ${prize.type === 'gem' ? '💎' : '🪙'} ${prize.amount}
+                                </div>
+                            </div>
+                        `).join('')}
+                        <div id="spinner-arrow" class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl">⬇️</div>
+                    </div>
                     <button id="spin-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">Spin</button>
                 </div>
             `;
 
             const spinBtn = document.getElementById('spin-btn');
-            const betInput = document.getElementById('bet-amount');
+            const spinner = document.getElementById('spinner');
 
             spinBtn.addEventListener('click', () => {
-                const betAmount = parseInt(betInput.value);
-                if (isNaN(betAmount) || betAmount <= 0 || betAmount > coins) {
-                    alert('Invalid bet amount!');
-                    return;
-                }
-
-                coins -= betAmount;
-                updateResources();
-
                 spinBtn.disabled = true;
+                const totalRotation = 3600 + Math.random() * 360;
+                spinner.style.transition = 'transform 5s cubic-bezier(0.25, 0.1, 0.25, 1)';
+                spinner.style.transform = `rotate(${totalRotation}deg)`;
+
                 setTimeout(() => {
-                    const multiplier = Math.random() < 0.5 ? 0  : (Math.random() * 2 + 1).toFixed(1);
-                    const winAmount = Math.floor(betAmount * multiplier);
-                    coins += winAmount;
+                    const finalRotation = totalRotation % 360;
+                    const prizeIndex = Math.floor(finalRotation / (360 / prizes.length));
+                    const prize = prizes[prizeIndex];
+
+                    if (prize.type === 'gem') {
+                        gems += prize.amount;
+                    } else {
+                        coins += prize.amount;
+                    }
                     updateResources();
-                    alert(`You won ${winAmount} CosmicCoins! (${multiplier}x)`);
+                    alert(`You won ${prize.amount} ${prize.type === 'gem' ? 'Galactic Gems' : 'CosmicCoins'}!`);
                     spinBtn.disabled = false;
                     updateCooldown('cosmic-spinner');
-                }, 3000);
+                }, 5000);
             });
         }
 
         function startSwipeCosmic() {
             gameArea.innerHTML = `
                 <div class="flex flex-col items-center justify-center h-full">
-                    <div id="swipe-area" class="w-64 h-32 bg-slate-600 rounded-lg flex items-center justify-center cursor-pointer">
-                        <div id="swipe-object" class="w-16 h-16 bg-indigo-500 rounded-full"></div>
+                    <div id="swipe-area" class="w-64 h-32 bg-slate-600 rounded-lg flex items-center justify-center cursor-pointer relative overflow-hidden">
+                        <div id="swipe-object" class="w-16 h-16 bg-indigo-500 rounded-full absolute left-0"></div>
                     </div>
-                    <p class="mt-4">Swipe the object to earn CosmicCoins!</p>
+                    <p id="swipe-timer" class="mt-4 text-2xl font-bold">60</p>
+                    <p class="mt-2">Swipe to earn CosmicCoins!</p>
                 </div>
             `;
 
             const swipeArea = document.getElementById('swipe-area');
             const swipeObject = document.getElementById('swipe-object');
-            let startX, startY, endX, endY;
+            const swipeTimer = document.getElementById('swipe-timer');
+            let startX, isDragging = false;
+            let timeLeft = 60;
+            let swipeCount = 0;
 
             swipeArea.addEventListener('mousedown', (e) => {
-                startX = e.clientX;
-                startY = e.clientY;
+                isDragging = true;
+                startX = e.clientX - swipeObject.offsetLeft;
             });
 
-            swipeArea.addEventListener('mouseup', (e) => {
-                endX = e.clientX;
-                endY = e.clientY;
-                const distance = Math.sqrt(Math.pow(endX - startX, 2) + Math.pow(endY - startY, 2));
-                if (distance > 50) {
-                    coins += 10;
+            swipeArea.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
+                let x = e.clientX - swipeArea.offsetLeft - startX;
+                x = Math.max(0, Math.min(x, swipeArea.clientWidth - swipeObject.clientWidth));
+                swipeObject.style.left = `${x}px`;
+
+                if (x === swipeArea.clientWidth - swipeObject.clientWidth) {
+                    swipeCount++;
+                    coins += 1;
                     updateResources();
-                    swipeObject.style.transition = 'transform 0.3s';
-                    swipeObject.style.transform = 'scale(1.2)';
-                    setTimeout(() => {
-                        swipeObject.style.transform = 'scale(1)';
-                    }, 300);
+                    swipeObject.style.left = '0px';
                 }
             });
 
-            setTimeout(() => {
-                alert('Time\'s up! Swipe Cosmic game ended.');
-                updateCooldown('swipe-cosmic');
-            }, 30000);
+            swipeArea.addEventListener('mouseup', () => {
+                isDragging = false;
+            });
+
+            swipeArea.addEventListener('mouseleave', () => {
+                isDragging = false;
+            });
+
+            const timer = setInterval(() => {
+                timeLeft--;
+                swipeTimer.textContent = timeLeft;
+                if (timeLeft === 0) {
+                    clearInterval(timer);
+                    alert(`Time's up! You swiped ${swipeCount} times and earned ${swipeCount} CosmicCoins!`);
+                    updateCooldown('swipe-cosmic');
+                }
+            }, 1000);
         }
 
         function startHoldCosmic() {
@@ -253,49 +295,48 @@
                     <div id="hold-button" class="w-32 h-32 bg-indigo-600 rounded-full flex items-center justify-center cursor-pointer select-none">
                         <span class="text-2xl font-bold">HOLD</span>
                     </div>
-                    <p id="hold-timer" class="mt-4 text-2xl font-bold">5</p>
+                    <p id="hold-timer" class="mt-4 text-2xl font-bold">60</p>
+                    <p id="hold-earnings" class="mt-2">Earnings: 0 CosmicCoins</p>
                 </div>
             `;
 
             const holdButton = document.getElementById('hold-button');
             const holdTimer = document.getElementById('hold-timer');
+            const holdEarnings = document.getElementById('hold-earnings');
             let isHolding = false;
-            let holdInterval;
-            let timeLeft = 5;
+            let timeLeft = 60;
+            let earnings = 0;
 
             holdButton.addEventListener('mousedown', () => {
                 isHolding = true;
                 holdButton.classList.add('bg-indigo-700');
-                holdInterval = setInterval(() => {
-                    timeLeft--;
-                    holdTimer.textContent = timeLeft;
-                    if (timeLeft === 0) {
-                        clearInterval(holdInterval);
-                        coins += 50;
-                        updateResources();
-                        alert('Congratulations! You earned 50 CosmicCoins!');
-                        updateCooldown('hold-cosmic');
-                    }
-                }, 1000);
             });
 
             holdButton.addEventListener('mouseup', () => {
                 isHolding = false;
                 holdButton.classList.remove('bg-indigo-700');
-                clearInterval(holdInterval);
-                timeLeft = 5;
-                holdTimer.textContent = timeLeft;
             });
 
             holdButton.addEventListener('mouseleave', () => {
-                if (isHolding) {
-                    isHolding = false;
-                    holdButton.classList.remove('bg-indigo-700');
-                    clearInterval(holdInterval);
-                    timeLeft = 5;
-                    holdTimer.textContent = timeLeft;
-                }
+                isHolding = false;
+                holdButton.classList.remove('bg-indigo-700');
             });
+
+            const timer = setInterval(() => {
+                timeLeft--;
+                holdTimer.textContent = timeLeft;
+                if (isHolding) {
+                    earnings++;
+                    coins++;
+                    updateResources();
+                    holdEarnings.textContent = `Earnings: ${earnings} CosmicCoins`;
+                }
+                if (timeLeft === 0) {
+                    clearInterval(timer);
+                    alert(`Time's up! You earned ${earnings} CosmicCoins!`);
+                    updateCooldown('hold-cosmic');
+                }
+            }, 1000);
         }
 
         function updateCooldown(game) {
@@ -311,11 +352,13 @@
                 const now = Date.now();
                 if (cooldown > now) {
                     button.disabled = true;
-                    const hoursLeft = Math.ceil((cooldown - now) / (60 * 60 * 1000));
-                    button.textContent = `${button.textContent} (${hoursLeft}h)`;
+                    const timeLeft = Math.ceil((cooldown - now) / 1000);
+                    const hours = Math.floor(timeLeft / 3600);
+                    const minutes = Math.floor((timeLeft % 3600) / 60);
+                    button.innerHTML = `${button.innerHTML.split('<br>')[0]}<br>(${hours}h ${minutes}m)`;
                 } else {
                     button.disabled = false;
-                    button.textContent = button.textContent.split(' (')[0];
+                    button.innerHTML = button.innerHTML.split('<br>')[0];
                 }
             });
         }
@@ -349,4 +392,4 @@
         setInterval(updateButtonStates, 60000); // Update button states every minute
     </script>
 </body>
-</html>
+    </html>
