@@ -234,112 +234,128 @@
             });
         }
 
-        function startSwipeCosmic() {
-            gameArea.innerHTML = `
-                <canvas id="game-canvas" width="300" height="400" class="border border-indigo-600"></canvas>
-                <p id="swipe-timer" class="mt-4 text-2xl font-bold">60</p>
-                <p id="swipe-score" class="mt-2 text-xl">Score: 0</p>
-                <button id="start-swipe" class="mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">Start Game</button>
-            `;
+        
+      function startSwipeCosmic() {
+    gameArea.innerHTML = `
+        <canvas id="game-canvas" width="300" height="400" class="border border-indigo-600"></canvas>
+        <p id="swipe-timer" class="mt-4 text-2xl font-bold">60</p>
+        <p id="swipe-score" class="mt-2 text-xl">Score: 0</p>
+        <button id="start-swipe" class="mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">Start Game</button>
+    `;
 
-            const canvas = document.getElementById('game-canvas');
-            const ctx = canvas.getContext('2d');
-            const swipeTimer = document.getElementById('swipe-timer');
-            const swipeScore = document.getElementById('swipe-score');
-            const startButton = document.getElementById('start-swipe');
+    const canvas = document.getElementById('game-canvas');
+    const ctx = canvas.getContext('2d');
+    const swipeTimer = document.getElementById('swipe-timer');
+    const swipeScore = document.getElementById('swipe-score');
+    const startButton = document.getElementById('start-swipe');
 
-            let coins = [];
-            let score = 0;
-            let timeLeft = 60;
-            let isGameRunning = false;
-            let gameLoop;
+    let gameCoins = []; // Renamed to avoid conflict
+    let score = 0;
+    let timeLeft = 60;
+    let isGameRunning = false;
+    let gameLoop;
 
-            class Coin {
-                constructor(x, y, value, velocity) {
-                    this.x = x;
-                    this.y = y;
-                    this.value = value;
-                    this.velocity = velocity;
-                }
-            }
+    // Coin class definition
+    class Coin {
+        constructor(x, y, value, velocity) {
+            this.x = x;
+            this.y = y;
+            this.value = value;
+            this.velocity = velocity;
+        }
+    }
 
-            function generateCoin() {
-                const x = canvas.width;
-                const y = Math.random() * (canvas.height - 20);
-                const value = Math.floor(Math.random() * 10) + 1;
-                const velocity = Math.random() * 2 + 1;
-                coins.push(new Coin(x, y, value, velocity));
-            }
+    // Generate a new coin
+    function generateCoin() {
+        const x = canvas.width;
+        const y = Math.random() * (canvas.height - 20);
+        const value = Math.floor(Math.random() * 10) + 1;
+        const velocity = Math.random() * 2 + 1;
+        gameCoins.push(new Coin(x, y, value, velocity));
+    }
 
-            function updateGame() {
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
+    // Update game state and draw coins
+    function updateGame() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-                coins = coins.filter(coin => {
-                    coin.x -= coin.velocity;
-                    ctx.fillStyle = 'gold';
-                    ctx.beginPath();
-                    ctx.arc(coin.x, coin.y, 10, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.fillStyle = 'black';
-                    ctx.font = '10px Arial';
-                    ctx.textAlign = 'center';
-                    ctx.fillText(coin.value, coin.x, coin.y + 3);
+        gameCoins = gameCoins.filter(coin => {
+            coin.x -= coin.velocity;
+            ctx.fillStyle = 'gold';
+            ctx.beginPath();
+            ctx.arc(coin.x, coin.y, 10, 0, Math.PI * 2);
+            ctx.fill();
+            ctx.fillStyle = 'black';
+            ctx.font = '10px Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(coin.value, coin.x, coin.y + 3);
 
-                    return coin.x > -20;
-                });
+            return coin.x > -20; // Remove coins that go off screen
+        });
 
-                if (Math.random() < 0.05) {
-                    generateCoin();
-                }
-
-                swipeScore.textContent = `Score: ${score}`;
-            }
-
-            function handleSwipe(e) {
-                if (!isGameRunning) return;
-
-                const rect = canvas.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-
-                coins = coins.filter(coin => {
-                    if (Math.abs(coin.x - x) < 20 && Math.abs(coin.y - y) < 20) {
-                        score += coin.value;
-                        return false;
-                    }
-                    return true;
-                });
-            }
-
-            canvas.addEventListener('click', handleSwipe);
-
-            startButton.addEventListener('click', () => {
-                if (isGameRunning) return;
-
-                isGameRunning = true;
-                startButton.style.display = 'none';
-                score = 0;
-                timeLeft = 60;
-
-                gameLoop = setInterval(() => {
-                    if (isGameRunning) {
-                        updateGame();
-                        timeLeft--;
-                        swipeTimer.textContent = timeLeft;
-
-                        if (timeLeft <= 0) {
-                            clearInterval(gameLoop);
-                            isGameRunning = false;
-                            alert(`Time's up! You scored ${score} points!`);
-                            coins += score;
-                            updateResources();
-                            gameArea.innerHTML = '';
-                        }
-                    }
-                }, 1000 / 60);
-            });
+        // Occasionally generate a new coin
+        if (Math.random() < 0.05) {
+            generateCoin();
         }
 
+        // Update the score display
+        swipeScore.textContent = `Score: ${score}`;
+    }
+
+    // Handle swipe/click on canvas
+    function handleSwipe(e) {
+        if (!isGameRunning) return;
+
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+
+        gameCoins = gameCoins.filter(coin => {
+            if (Math.abs(coin.x - x) < 20 && Math.abs(coin.y - y) < 20) {
+                score += coin.value;
+                return false; // Remove coin if swiped
+            }
+            return true;
+        });
+    }
+
+    // Listen for swipe (click) on the canvas
+    canvas.addEventListener('click', handleSwipe);
+
+    // Start the game
+    startButton.addEventListener('click', () => {
+        if (isGameRunning) return;
+
+        isGameRunning = true;
+        startButton.style.display = 'none'; // Hide the start button
+        score = 0;
+        timeLeft = 60;
+
+        // Game loop runs at 60 FPS
+        gameLoop = setInterval(() => {
+            if (isGameRunning) {
+                updateGame();
+                timeLeft--;
+                swipeTimer.textContent = timeLeft;
+
+                if (timeLeft <= 0) {
+                    clearInterval(gameLoop); // Stop game loop
+                    isGameRunning = false;
+                    alert(`Time's up! You scored ${score} points!`);
+                    
+                    // Update the global resources (coins or gems)
+                    coins += score; // Assuming 'coins' is the global resource variable
+                    updateResources(); // Update the resource display
+                    gameArea.innerHTML = ''; // Clear game area
+
+                    // Reset the start button for replay
+                    startSwipeCosmic(); // Reinitialize the game
+                }
+            }
+        }, 1000 / 60); // 60 frames per second
+    });
+}
+
+        
         function startHoldCosmic() {
             gameArea.innerHTML = `
                 <div class="flex flex-col items-center justify-center h-full">
