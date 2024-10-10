@@ -50,16 +50,24 @@
         const coinsElement = document.getElementById('coins');
         const gameButtons = document.querySelectorAll('.game-btn');
 
+       // Fetch stored values from localStorage
+        let gems = parseInt(localStorage.getItem('gems')) || 0;
+        let coins = parseInt(localStorage.getItem('coins')) || 1000;
+        let currentGame = localStorage.getItem('currentGame') || null;
+            
         let gems = 0;
         let coins = 1000;
         let currentGame = null;
         let gameInterval;
 
+        // Update UI with stored values
         function updateResources() {
             gemsElement.textContent = gems;
             coinsElement.textContent = coins;
+            localStorage.setItem('gems', gems);
+            localStorage.setItem('coins', coins);
         }
-
+        
         function createSVGElement(type) {
             const ns = "http://www.w3.org/2000/svg";
             const svg = document.createElementNS(ns, "svg");
