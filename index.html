@@ -60,13 +60,11 @@
         let currentGame = null;
         let gameInterval;
 
-        // Update UI with stored values
         function updateResources() {
             gemsElement.textContent = gems;
             coinsElement.textContent = coins;
-            localStorage.setItem('gems', gems);
-            localStorage.setItem('coins', coins);
         }
+
         
         function createSVGElement(type) {
             const ns = "http://www.w3.org/2000/svg";
