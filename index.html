@@ -108,7 +108,7 @@
         const gameButtons = document.querySelectorAll('.game-btn');
 
         let gems = parseInt(localStorage.getItem('gems')) || 0;
-        let coins = parseInt(localStorage.getItem('coins')) || 1000;
+        let coins = parseInt(localStorage.getItem('coins')) || 10;
         let currentGame = null;
         let gameInterval;
 
@@ -203,7 +203,7 @@
                         if (object.classList.contains('asteroid')) {
                             endGame();
                         } else {
-                            score += 10;
+                            score += 5;
                             gems += 1;
                             scoreElement.textContent = `Score: ${score}`;
                             updateResources();
@@ -212,19 +212,19 @@
                     }
                 });
 
-                if (Math.random() < 0.05) {
+                if (Math.random() < 0.04) {
                     createGameObject('asteroid');
                 }
-                if (Math.random() < 0.02) {
+                if (Math.random() < 0.03) {
                     createGameObject('gem');
                 }
             }
 
-            gameInterval = setInterval(updateGame, 50);
+            gameInterval = setInterval(updateGame, 40);
 
             gameArea.addEventListener('mousemove', (e) => {
                 const rect = gameArea.getBoundingClientRect();
-                const x = e.clientX - rect.left - 20;
+                const x = e.clientX - rect.left - 19;
                 ship.style.left = `${Math.max(0, Math.min(x, gameArea.clientWidth - 40))}px`;
             });
 
@@ -242,11 +242,14 @@
 
         function startCosmicSpinner() {
             const prizes = [
-                { type: 'gem', amount: 5, probability: 0.3 },
-                { type: 'coin', amount: 50, probability: 0.3 },
-                { type: 'gem', amount: 10, probability: 0.2  },
-                { type: 'coin', amount: 100, probability: 0.15 },
-                { type: 'gem', amount: 20, probability: 0.05 },
+                { type: 'gem', amount: 5, probability: 0.004 },
+                { type: 'coin', amount: 50, probability: 0.03 },
+                { type: 'gem', amount: 10, probability: 0.005  },
+                { type: 'coin', amount: 100, probability: 0.015 },
+                { type: 'gem', amount: 20, probability: 0.007 },
+                { type: 'coin', amount: 500, probability: 0.00015 },
+                { type: 'gem', amount: 100, probability: 0.0007 },
+          
             ];
 
             gameArea.innerHTML = `
