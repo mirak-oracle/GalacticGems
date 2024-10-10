@@ -50,18 +50,18 @@
         const coinsElement = document.getElementById('coins');
         const gameButtons = document.querySelectorAll('.game-btn');
 
-       // Fetch stored values from localStorage
         let gems = parseInt(localStorage.getItem('gems')) || 0;
         let coins = parseInt(localStorage.getItem('coins')) || 1000;
-        let currentGame = localStorage.getItem('currentGame') || null;
-            
-        
+        let currentGame = null;
+        let gameInterval;
+
         function updateResources() {
             gemsElement.textContent = gems;
             coinsElement.textContent = coins;
+            localStorage.setItem('gems', gems);
+            localStorage.setItem('coins', coins);
         }
 
-        
         function createSVGElement(type) {
             const ns = "http://www.w3.org/2000/svg";
             const svg = document.createElementNS(ns, "svg");
@@ -174,8 +174,12 @@
             function endGame() {
                 isGameOver = true;
                 clearInterval(gameInterval);
-                alert(`Game Over! You scored ${score} points and earned ${gems} Galactic Gems!`);
-                gameArea.innerHTML = '';
+                const finalScore = score;
+                const finalGems = gems - score / 10;
+                setTimeout(() => {
+                    alert(`Game Over! You scored ${finalScore} points and earned ${finalGems} Galactic Gems!`);
+                    gameArea.innerHTML = '';
+                }, 100);
             }
         }
 
@@ -183,7 +187,7 @@
             const prizes = [
                 { type: 'gem', amount: 5, probability: 0.3 },
                 { type: 'coin', amount: 50, probability: 0.3 },
-                { type: 'gem', amount: 10, probability: 0.2 },
+                { type: 'gem', amount: 10, probability: 0.2  },
                 { type: 'coin', amount: 100, probability: 0.15 },
                 { type: 'gem', amount: 20, probability: 0.05 },
             ];
@@ -191,9 +195,8 @@
             gameArea.innerHTML = `
                 <div class="flex flex-col items-center justify-center h-full">
                     <div id="spinner" class="w-64 h-64 border-8 border-indigo-600 rounded-full relative mb-4">
-                
                         ${prizes.map((prize, index) => `
-                            <div class="absolute w-full h-full" style="transform:  rotate(${index * (360 / prizes.length)}deg)">
+                            <div class="absolute w-full h-full" style="transform: rotate(${index * (360 / prizes.length)}deg)">
                                 <div class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-indigo-500 text-white px-2 py-1 rounded">
                                     ${prize.type === 'gem' ? '💎' : '🪙'} ${prize.amount}
                                 </div>
@@ -236,16 +239,20 @@
                 <canvas id="game-canvas" width="300" height="400" class="border border-indigo-600"></canvas>
                 <p id="swipe-timer" class="mt-4 text-2xl font-bold">60</p>
                 <p id="swipe-score" class="mt-2 text-xl">Score: 0</p>
+                <button id="start-swipe" class="mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">Start Game</button>
             `;
 
             const canvas = document.getElementById('game-canvas');
             const ctx = canvas.getContext('2d');
             const swipeTimer = document.getElementById('swipe-timer');
             const swipeScore = document.getElementById('swipe-score');
+            const startButton = document.getElementById('start-swipe');
 
             let coins = [];
             let score = 0;
             let timeLeft = 60;
+            let isGameRunning = false;
+            let gameLoop;
 
             class Coin {
                 constructor(x, y, value, velocity) {
@@ -289,6 +296,8 @@
             }
 
             function handleSwipe(e) {
+                if (!isGameRunning) return;
+
                 const rect = canvas.getBoundingClientRect();
                 const x = e.clientX - rect.left;
                 const y = e.clientY - rect.top;
@@ -304,19 +313,31 @@
 
             canvas.addEventListener('click', handleSwipe);
 
-            const gameLoop = setInterval(() => {
-                updateGame();
-                timeLeft--;
-                swipeTimer.textContent = timeLeft;
+            startButton.addEventListener('click', () => {
+                if (isGameRunning) return;
 
-                if (timeLeft <= 0) {
-                    clearInterval(gameLoop);
-                    alert(`Time's up! You scored ${score} points!`);
-                    coins += score;
-                    updateResources();
-                    gameArea.innerHTML = '';
-                }
-            }, 1000 / 60);
+                isGameRunning = true;
+                startButton.style.display = 'none';
+                score = 0;
+                timeLeft = 60;
+
+                gameLoop = setInterval(() => {
+                    if (isGameRunning) {
+                        updateGame();
+                        timeLeft--;
+                        swipeTimer.textContent = timeLeft;
+
+                        if (timeLeft <= 0) {
+                            clearInterval(gameLoop);
+                            isGameRunning = false;
+                            alert(`Time's up! You scored ${score} points!`);
+                            coins += score;
+                            updateResources();
+                            gameArea.innerHTML = '';
+                        }
+                    }
+                }, 1000 / 60);
+            });
         }
 
         function startHoldCosmic() {
@@ -345,14 +366,11 @@
                 }
             }
 
-            holdButton.addEventListener('mousedown', () => {
+            function startHold() {
                 isHolding = true;
                 holdButton.classList.add('bg-indigo-700');
                 holdInterval = setInterval(updateHoldGame, 1000);
-            });
-
-            holdButton.addEventListener('mouseup', endHold);
-            holdButton.addEventListener('mouseleave', endHold);
+            }
 
             function endHold() {
                 if (isHolding) {
@@ -368,6 +386,20 @@
                     holdTimer.textContent = `Time: 0s`;
                 }
             }
+
+            holdButton.addEventListener('mousedown', startHold);
+            holdButton.addEventListener('mouseup', endHold);
+            holdButton.addEventListener('mouseleave', endHold);
+
+            // Touch event support for mobile devices
+            holdButton.addEventListener('touchstart', (e) => {
+                e.preventDefault();  // Prevent mousedown event on touch devices
+                startHold();
+            });
+            holdButton.addEventListener('touchend', (e) => {
+                e.preventDefault();  // Prevent mouseup event on touch devices
+                endHold();
+            });
         }
 
         gameButtons.forEach(button => {
@@ -382,6 +414,9 @@
                 else if (game === 'hold-cosmic') startHoldCosmic();
             });
         });
+
+        // Initialize resources
+        updateResources();
     </script>
 </body>
 </html>
