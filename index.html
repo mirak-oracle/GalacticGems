@@ -119,7 +119,7 @@
         }
 
         function updateCooldown(game) {
-            cooldowns[game] = Date.now() + 6 * 60 * 60 * 1000; // 6 hours in milliseconds
+            cooldowns[game] = Date.now() + 0 * 60 * 60 * 1000; // 6 hours in milliseconds
             localStorage.setItem('cooldowns', JSON.stringify(cooldowns));
             updateButtonStates();
         }
