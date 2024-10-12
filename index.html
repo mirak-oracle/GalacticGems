@@ -16,10 +16,42 @@
         .cosmic-bg {
             background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="400" viewBox="0 0 800 800"><rect fill="%230f172a" width="800" height="800"/><g fill="none" stroke="%234338ca" stroke-width="1"><path d="M769 229L1037 260.9M927 880L731 737 520 660 309 538 40 599 295 764 126.5 879.5 40 599-197 493 102 382-31 229 126.5 79.5-69-63"/><path d="M-31 229L237 261 390 382 603 493 308.5 537.5 101.5 381.5M370 905L295 764"/><path d="M520 660L578 842 731 737 840 599 603 493 520 660 295 764 309 538 390 382 539 269 769 229 577.5 41.5 370 105 295 -36 126.5 79.5 237 261 102 382 40 599 -69 737 127 880"/><path d="M520-140L578.5 42.5 731-63M603 493L539 269 237 261 370 105M902 382L539 269M390 382L102 382"/><path d="M-222 42L126.5 79.5 370 105 539 269 577.5 41.5 927 80 769 229 902 382 603 493 731 737M295-36L577.5 41.5M578 842L295 764M40-201L127 80M102 382L-261 269"/></g><g fill="%234338ca"><circle cx="769" cy="229" r="5"/><circle cx="539" cy="269" r="5"/><circle cx="603" cy="493" r="5"/><circle cx="731" cy="737" r="5"/><circle cx="520" cy="660" r="5"/><circle cx="309" cy="538" r="5"/><circle cx="295" cy="764" r="5"/><circle cx="40" cy="599" r="5"/><circle cx="102" cy="382" r="5"/><circle cx="127" cy="80" r="5"/><circle cx="370" cy="105" r="5"/><circle cx="578" cy="42" r="5"/><circle cx="237" cy="261" r="5"/><circle cx="390" cy="382" r="5"/></g></svg>');
         }
+        .game-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        .tooltip {
+            visibility: hidden;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: #fff;
+            text-align: center;
+            padding: 5px 10px;
+            border-radius: 6px;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+        .tooltip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: rgba(0, 0, 0, 0.8) transparent transparent transparent;
+        }
+        .game-btn:hover .tooltip {
+            visibility: visible;
+        }
     </style>
 </head>
-
-    <!-- Google tag (gtag.js) -->
+    
+<!-- Google tag (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-ES3NKKYCS7"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -30,97 +62,99 @@
   </script>
     
 <body class="bg-slate-900 text-white min-h-screen flex flex-col items-center justify-center cosmic-bg">
-    <div id="game-container" class="w-full max-w-3xl p-6 bg-slate-800 bg-opacity-90 rounded-xl shadow-2xl">
+    <div id="game-container" class="w-full max-w-4xl p-6 bg-slate-800 bg-opacity-90 rounded-xl shadow-2xl">
         <!-- Header -->
-        <h1 class="text-4xl font-bold text-center mb-6 text-indigo-400">Cosmic Games Hub</h1>
+        <h1 class="text-5xl font-bold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600">Cosmic Games Hub</h1>
         
         <!-- Stats Section -->
-        <div class="flex justify-between items-center mb-6 text-lg">
+        <div class="flex justify-between items-center mb-8 text-lg bg-slate-700 p-4 rounded-lg">
             <div class="flex items-center">
-                <i class="fas fa-gem text-yellow-400 mr-2"></i>
-                <span>Gems: <span id="gems" class="font-bold">0</span></span>
+                <i class="fas fa-gem text-yellow-400 mr-2 text-2xl"></i>
+                <span>Gems: <span id="gems" class="font-bold text-2xl">0</span></span>
             </div>
             <div class="flex items-center">
-                <i class="fas fa-coins text-indigo-400 mr-2"></i>
-                <span>CosmicCoins: <span id="coins" class="font-bold">1000</span></span>
+                <i class="fas fa-coins text-indigo-400 mr-2 text-2xl"></i>
+                <span>CosmicCoins: <span id="coins" class="font-bold text-2xl">1000</span></span>
             </div>
         </div>
 
         <!-- Game Selection Buttons -->
-        <div id="game-selection" class="grid grid-cols-2 gap-4 mb-6">
-            <button class="game-btn bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105" data-game="cosmic-blast">
+        <div id="game-selection" class="grid grid-cols-2 gap-6 mb-8">
+            <button class="game-btn bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg relative" data-game="cosmic-blast">
                 <i class="fas fa-rocket mr-2"></i>Cosmic Blast
+                <span class="tooltip">Dodge asteroids and collect gems!</span>
             </button>
-            <button class="game-btn bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105" data-game="cosmic-spinner">
+            <button class="game-btn bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg relative" data-game="cosmic-spinner">
                 <i class="fas fa-sync-alt mr-2"></i>Cosmic Spinner
+                <span class="tooltip">Spin the wheel for cosmic prizes!</span>
             </button>
-            <button class="game-btn bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105" data-game="hold-cosmic">
+            <button class="game-btn bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg relative" data-game="swipe-cosmic">
+                <i class="fas fa-hand-point-up mr-2"></i>Swipe Cosmic
+                <span class="tooltip">Swipe coins to earn points!</span>
+            </button>
+            <button class="game-btn bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 text-white font-bold py-4 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg relative" data-game="hold-cosmic">
                 <i class="fas fa-hand-rock mr-2"></i>Hold Cosmic
+                <span class="tooltip">Hold to earn CosmicCoins!</span>
             </button>
+        </div>
+
+        <!-- Live Music Player -->
+        <div class="text-center bg-slate-700 rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-bold mb-4">Cosmic Radio</h2>
             
+            <!-- Audio player -->
+            <audio id="music-player" autoplay>
+                <source src="http://listen.181fm.com/181-beat_128k.mp3?noPreRoll=true" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+
+            <!-- Mute and Unmute buttons -->
+            <div class="mt-4 flex justify-center gap-4">
+                <button id="mute-btn" class="game-btn bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg">
+                    <i class="fas fa-volume-up mr-2"></i>Mute
+                </button>
+                <button id="unmute-btn" class="game-btn bg-gradient-to-r from-red-500 to-yellow-500 hover:from-red-600 hover:to-yellow-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg hidden">
+                    <i class="fas fa-volume-mute mr-2"></i>Unmute
+                </button>
+            </div>
         </div>
-<!-- Live Music Player -->
-<div class="text-center bg-slate-700 rounded-lg p-4">
-    <h2 class="text-2xl font-bold mb-4">Live Music Player</h2>
-    
-    <!-- Audio player -->
-    <audio id="music-player" autoplay>
-        <source src="http://listen.181fm.com/181-beat_128k.mp3?noPreRoll=true" type="audio/mpeg">
-        Your browser does not support the audio element.
-    </audio>
 
-    <!-- Mute and Unmute buttons -->
-    <div class="mt-4 flex justify-center gap-4">
-        <button id="mute-btn" class="game-btn bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105">
-            <i class="fas fa-volume-mute mr-2"></i>Mute 🔇
-        </button>
-        <button id="unmute-btn" class="game-btn bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-3 px-4 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 hidden">
-            <i class="fas fa-volume-up mr-2"></i>Unmute 🔊
-        </button>
-    </div>
-</div>
-
-        <div id="game-area" class="bg-slate-700 rounded-lg p-4 h-96 relative overflow-hidden">
+        <div id="game-area" class="bg-slate-700 rounded-lg p-6 h-96 relative overflow-hidden shadow-inner">
             <!-- Game elements will be added here dynamically -->
+            <div class="flex items-center justify-center h-full text-2xl text-gray-400">
+                Select a game to start playing!
+            </div>
         </div>
     </div>
-    
-        
-
-        
-<script>
-    document.addEventListener("DOMContentLoaded", function () {
-    const musicPlayer = document.getElementById('music-player');
-    const muteButton = document.getElementById('mute-btn');
-    const unmuteButton = document.getElementById('unmute-btn');
-
-    // Mute the player
-    muteButton.addEventListener('click', () => {
-        musicPlayer.muted = true;
-        muteButton.classList.add('hidden');
-        unmuteButton.classList.remove('hidden');
-    });
-
-    // Unmute the player
-    unmuteButton.addEventListener('click', () => {
-        musicPlayer.muted = false;
-        unmuteButton.classList.add('hidden');
-        muteButton.classList.remove('hidden');
-    });
-});
-    
-
-</script>
-
     
     <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const musicPlayer = document.getElementById('music-player');
+            const muteButton = document.getElementById('mute-btn');
+            const unmuteButton = document.getElementById('unmute-btn');
+
+            // Mute the player
+            muteButton.addEventListener('click', () => {
+                musicPlayer.muted = true;
+                muteButton.classList.add('hidden');
+                unmuteButton.classList.remove('hidden');
+            });
+
+            // Unmute the player
+            unmuteButton.addEventListener('click', () => {
+                musicPlayer.muted = false;
+                unmuteButton.classList.add('hidden');
+                muteButton.classList.remove('hidden');
+            });
+        });
+
         const gameArea = document.getElementById('game-area');
         const gemsElement = document.getElementById('gems');
         const coinsElement = document.getElementById('coins');
         const gameButtons = document.querySelectorAll('.game-btn');
 
         let gems = parseInt(localStorage.getItem('gems')) || 0;
-        let coins = parseInt(localStorage.getItem('coins')) || 10;
+        let coins = parseInt(localStorage.getItem('coins')) || 1000;
         let currentGame = null;
         let gameInterval;
 
@@ -145,7 +179,7 @@
                 path.setAttribute("d", "M21.82 15.42L19.32 19.75C18.83 20.61 17.92 21.06 17 21H15V23L12.5 18.5L15 14V16H17.82L15.6 12.15L19.93 9.65C20.79 9.16 21.24 8.25 21.18 7.33C21.13 6.41 20.54 5.57 19.66 5.18C18.78 4.79 17.77 4.91 17 5.5L12.72 8.19L5.82 3.63C4.97 3.06 3.83 3.13 3.05 3.83C2.27 4.5 2.03 5.62 2.50 6.54L5.72 13.14L4.72 14.61C3.29 17.01 3.81 20.12 6.00 22.00L7.00 23.00L6.00 12.00L10.00 14.00L12.00 22.00L13.00 21.00L13.31 20.58C13.59 20.18 13.78 19.74 13.87 19.26L14.20 17.78L16.20 19.78C16.80 20.38 17.20 21.18 17.20 22.00V23.00L18.20 22.00C19.82 20.38 20.50 18.10 20.00 16.00L19.82 15.42H21.82ZM13.00 2.00C12.40 2.00 12.00 2.40 12.00 3.00C12.00 3.60 12.40 4.00 13.00 4.00C13.60 4.00 14.00 3.60 14.00 3.00C14.00 2.40 13.60 2.00 13.00 2.00Z");
             } else if (type === "spaceship") {
                 svg.setAttribute("fill", "#818cf8");
-                path.setAttribute("d", "M13,2.05V5.08C16.39,5.57 19,8.47 19,12C19,12.9 18.82,13.75 18.5,14.54L21.12,16.07C21.68,14.83 22,13.45 22,12C22,6.82 18.05,2.55 13,2.05M12,19A7,7 0 0,1 5,12C5,8.47 7.61,5.57 11,5.08V2.05C5.94,2.55 2,6.81 2,12A10,10 0 0,0 12,22C15.3,22 18.23,20.39 20.05,17.91L17.45,16.38C16.17,18 14.21,19 12,19Z");
+                path.setAttribute("d", "M13,2.05V5.08C16.39,5.57 19,8.47 19,12C19,12.9 18.82,13.75 18.5,14.54L21.12,16.07C21.68,14.83 22,13.45 22,12C22,6.82 18.05,2.55 13,2.05M12,19A7,7 0 0,1 5,12C5,8.47 7.61,5.57 11,5.08V2.05C5.94,2.55 2,6.81 2,12A10,10 0 0,0 12,22C15.3,22  18.23,20.39 20.05,17.91L17.45,16.38C16.17,18 14.21,19 12,19Z");
             } else if (type === "gem") {
                 svg.innerHTML = `
                     <linearGradient id="gem-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -215,7 +249,7 @@
                         if (object.classList.contains('asteroid')) {
                             endGame();
                         } else {
-                            score += 5;
+                            score += 10;
                             gems += 1;
                             scoreElement.textContent = `Score: ${score}`;
                             updateResources();
@@ -224,19 +258,19 @@
                     }
                 });
 
-                if (Math.random() < 0.04) {
+                if (Math.random() < 0.05) {
                     createGameObject('asteroid');
                 }
-                if (Math.random() < 0.06) {
+                if (Math.random() < 0.02) {
                     createGameObject('gem');
                 }
             }
 
-            gameInterval = setInterval(updateGame, 60);
+            gameInterval = setInterval(updateGame, 50);
 
             gameArea.addEventListener('mousemove', (e) => {
                 const rect = gameArea.getBoundingClientRect();
-                const x = e.clientX - rect.left - 19;
+                const x = e.clientX - rect.left - 20;
                 ship.style.left = `${Math.max(0, Math.min(x, gameArea.clientWidth - 40))}px`;
             });
 
@@ -276,7 +310,7 @@
                         `).join('')}
                         <div id="spinner-arrow" class="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 text-4xl">⬇️</div>
                     </div>
-                    <button id="spin-btn" class="bg-indigo-600 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded">Spin</button>
+                    <button id="spin-btn" class="bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg">Spin</button>
                 </div>
             `;
 
@@ -306,132 +340,116 @@
             });
         }
 
-        
-      function startSwipeCosmic() {
-    gameArea.innerHTML = `
-        <canvas id="game-canvas" width="300" height="400" class="border border-indigo-600"></canvas>
-        <p id="swipe-timer" class="mt-4 text-2xl font-bold">60</p>
-        <p id="swipe-score" class="mt-2 text-xl">Score: 0</p>
-        <button id="start-swipe" class="mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded">Start Game</button>
-    `;
+        function startSwipeCosmic() {
+            gameArea.innerHTML = `
+                <canvas id="game-canvas" width="300" height="400" class="border border-indigo-600"></canvas>
+                <p id="swipe-timer" class="mt-4 text-2xl font-bold">60</p>
+                <p id="swipe-score" class="mt-2 text-xl">Score: 0</p>
+                <button id="start-swipe" class="mt-4 bg-gradient-to-r from-green-500 to-blue-500 hover:from-green-600 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300 ease-in-out transform hover:scale-105 shadow-lg">Start Game</button>
+            `;
 
-    const canvas = document.getElementById('game-canvas');
-    const ctx = canvas.getContext('2d');
-    const swipeTimer = document.getElementById('swipe-timer');
-    const swipeScore = document.getElementById('swipe-score');
-    const startButton = document.getElementById('start-swipe');
+            const canvas = document.getElementById('game-canvas');
+            const ctx = canvas.getContext('2d');
+            const swipeTimer = document.getElementById('swipe-timer');
+            const swipeScore = document.getElementById('swipe-score');
+            const startButton = document.getElementById('start-swipe');
 
-    let gameCoins = []; // Renamed to avoid conflict
-    let score = 0;
-    let timeLeft = 60;
-    let isGameRunning = false;
-    let gameLoop;
+            let coins = [];
+            let score = 0;
+            let timeLeft = 60;
+            let isGameRunning = false;
+            let gameLoop;
 
-    // Coin class definition
-    class Coin {
-        constructor(x, y, value, velocity) {
-            this.x = x;
-            this.y = y;
-            this.value = value;
-            this.velocity = velocity;
-        }
-    }
-
-    // Generate a new coin
-    function generateCoin() {
-        const x = canvas.width;
-        const y = Math.random() * (canvas.height - 20);
-        const value = Math.floor(Math.random() * 10) + 1;
-        const velocity = Math.random() * 2 + 1;
-        gameCoins.push(new Coin(x, y, value, velocity));
-    }
-
-    // Update game state and draw coins
-    function updateGame() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        gameCoins = gameCoins.filter(coin => {
-            coin.x -= coin.velocity;
-            ctx.fillStyle = 'gold';
-            ctx.beginPath();
-            ctx.arc(coin.x, coin.y, 10, 0, Math.PI * 2);
-            ctx.fill();
-            ctx.fillStyle = 'black';
-            ctx.font = '10px Arial';
-            ctx.textAlign = 'center';
-            ctx.fillText(coin.value, coin.x, coin.y + 3);
-
-            return coin.x > -20; // Remove coins that go off screen
-        });
-
-        // Occasionally generate a new coin
-        if (Math.random() < 0.05) {
-            generateCoin();
-        }
-
-        // Update the score display
-        swipeScore.textContent = `Score: ${score}`;
-    }
-
-    // Handle swipe/click on canvas
-    function handleSwipe(e) {
-        if (!isGameRunning) return;
-
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-
-        gameCoins = gameCoins.filter(coin => {
-            if (Math.abs(coin.x - x) < 20 && Math.abs(coin.y - y) < 20) {
-                score += coin.value;
-                return false; // Remove coin if swiped
-            }
-            return true;
-        });
-    }
-
-    // Listen for swipe (click) on the canvas
-    canvas.addEventListener('click', handleSwipe);
-
-    // Start the game
-    startButton.addEventListener('click', () => {
-        if (isGameRunning) return;
-
-        isGameRunning = true;
-        startButton.style.display = 'none'; // Hide the start button
-        score = 0;
-        timeLeft = 60;
-
-        // Game loop runs at 60 FPS
-        gameLoop = setInterval(() => {
-            if (isGameRunning) {
-                updateGame();
-                timeLeft--;
-                swipeTimer.textContent = timeLeft;
-
-                if (timeLeft <= 0) {
-                    clearInterval(gameLoop); // Stop game loop
-                    isGameRunning = false;
-                    alert(`Time's up! You scored ${score} points!`);
-                    
-                    // Update the global resources (coins or gems)
-                    coins += score; // Assuming 'coins' is the global resource variable
-                    updateResources(); // Update the resource display
-                    gameArea.innerHTML = ''; // Clear game area
-
-                    // Reset the start button for replay
-                    startSwipeCosmic(); // Reinitialize the game
+            class Coin {
+                constructor(x, y, value, velocity) {
+                    this.x = x;
+                    this.y = y;
+                    this.value = value;
+                    this.velocity = velocity;
                 }
             }
-        }, 1000 / 60); // 60 frames per second
-    });
-}
 
-        
+            function generateCoin() {
+                const x = canvas.width;
+                const y = Math.random() * (canvas.height - 20);
+                const value = Math.floor(Math.random() * 10) + 1;
+                const velocity = Math.random() * 2 + 1;
+                coins.push(new Coin(x, y, value, velocity));
+            }
+
+            function updateGame() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                coins = coins.filter(coin => {
+                    coin.x -= coin.velocity;
+                    ctx.fillStyle = 'gold';
+                    ctx.beginPath();
+                    ctx.arc(coin.x, coin.y, 10, 0, Math.PI * 2);
+                    ctx.fill();
+                    ctx.fillStyle = 'black';
+                    ctx.font = '10px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(coin.value, coin.x, coin.y + 3);
+
+                    return coin.x > -20;
+                });
+
+                if (Math.random() < 0.05) {
+                    generateCoin();
+                }
+
+                swipeScore.textContent = `Score: ${score}`;
+            }
+
+            function handleSwipe(e) {
+                if (!isGameRunning) return;
+
+                const rect = canvas.getBoundingClientRect();
+                const x = e.clientX - rect.left;
+                const y = e.clientY - rect.top;
+
+                coins = coins.filter(coin => {
+                    if (Math.abs(coin.x - x) < 20 && Math.abs(coin.y - y) < 20) {
+                        score += coin.value;
+                        return false;
+                    }
+                    return true;
+                });
+            }
+
+            canvas.addEventListener('click', handleSwipe);
+
+            startButton.addEventListener('click', () => {
+                if (isGameRunning) return;
+
+                isGameRunning = true;
+                startButton.style.display = 'none';
+                score = 0;
+                timeLeft = 60;
+
+                gameLoop = setInterval(() => {
+                    if (isGameRunning) {
+                        updateGame();
+                        timeLeft--;
+                        swipeTimer.textContent = timeLeft;
+
+                        if (timeLeft <= 0) {
+                            clearInterval(gameLoop);
+                            isGameRunning = false;
+                            alert(`Time's up! You scored ${score} points!`);
+                            coins += score;
+                            updateResources();
+                            gameArea.innerHTML = '';
+                        }
+                    }
+                }, 1000 / 60);
+            });
+        }
+
         function startHoldCosmic() {
             gameArea.innerHTML = `
                 <div class="flex flex-col items-center justify-center h-full">
-                    <button id="hold-button" class="w-32 h-32 bg-indigo-600 rounded-full flex items-center justify-center cursor-pointer select-none text-2xl font-bold">HOLD</button>
+                    <button id="hold-button" class="w-32 h-32 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700 rounded-full flex items-center justify-center cursor-pointer select-none text-2xl font-bold shadow-lg transition duration-300 ease-in-out transform hover:scale-105">HOLD</button>
                     <p id="hold-earnings" class="mt-4 text-2xl font-bold">Earnings: 0 CosmicCoins</p>
                     <p id="hold-timer" class="mt-2 text-xl">Time: 0s</p>
                 </div>
