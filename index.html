@@ -167,8 +167,8 @@
         const coinsElement = document.getElementById('coins');
         const gameButtons = document.querySelectorAll('.game-btn');
 
-        let gems = parseInt(localStorage.getItem('gems')) || 0;
-        let coins = parseInt(localStorage.getItem('coins')) || 1000;
+        let gems = parseInt(localStorage.getItem('gems')) || 5;
+        let coins = parseInt(localStorage.getItem('coins')) || 10;
         let currentGame = null;
         let gameInterval;
 
